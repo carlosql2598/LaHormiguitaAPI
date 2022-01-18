@@ -1,0 +1,25 @@
+{
+  "name": "lahormiguita_api",
+  "version": "1.0.0",
+  "description": "API del proyecti La Hormiguita",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlosql2598/LaHormiguitaAPI.git"
+  },
+  "author": "Carlos Alberto Quispe León - Yake Victor Nunura Baylon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carlosql2598/LaHormiguitaAPI/issues"
+  },
+  "homepage": "https://github.com/carlosql2598/LaHormiguitaAPI#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
