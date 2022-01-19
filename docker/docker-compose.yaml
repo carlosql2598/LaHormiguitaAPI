@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+    mariadb:
+        image: linuxserver/mariadb:arm32v7-10.5.13-alpine
+        container_name: mariadb
+        environment:
+            - MYSQL_ROOT_PASSWORD=${ROOT_PASSWD}
+            - TZ=America/Lima
+            - MYSQL_DATABASE=${DATABASE_NAME}
+            - MYSQL_USER=${USERNAME}
+            - MYSQL_PASSWORD=${USER_PASSWD}
+        volumes:
+            - mariadb_vol:/config
+        ports:
+            - 3306:3306
+        #restart: unless-stopped
+
+    node_server:
+        build:
+            context: ${SRC_PATH}
+            dockerfile: ${SRC_PATH}/LaHormiguitaAPI/docker/Dockerfile
+        container_name: node_dev
+        ports:
+            - 3000:3000
+        volumes:
+            - ${SRC_PATH}/LaHormiguitaAPI/src:/usr/src/LaHormiguitaAPI/src
+        depends_on: 
+            - mariadb
+
+volumes:
+    mariadb_vol:
+        driver: local
