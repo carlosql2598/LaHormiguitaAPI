@@ -2,7 +2,7 @@ version: "3"
 
 services:
     mariadb:
-        image: linuxserver/mariadb:arm32v7-10.5.13-alpine
+        image: linuxserver/mariadb:10.5.15-alpine
         container_name: mariadb
         environment:
             - MYSQL_ROOT_PASSWORD=${ROOT_PASSWD}
