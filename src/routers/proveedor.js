@@ -3,10 +3,6 @@ const router = Router();
 const mysql = require('../conexionbd');
 const { check,validationResult } = require('express-validator');
 
-function send_response(status_code, message, error=null, res) {
-    res.status(status_code).json({"status": status_code, "message": message, "error": error});
-}
-
 router.post('/insertar', 
     [
         check('PROV_NOMBRE', 'La variable PROV_NOMBRE debe contener entre 1 y 45 caracteres.').isLength({min: 1, max: 45}),
