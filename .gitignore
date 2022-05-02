@@ -102,3 +102,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Archivos no necesarios
+.history
+src/constantes.js
+docker/.env

@@ -2,7 +2,7 @@ const constantes = {
     "origin": "http://localhost:4200",
     
     "hostLocal": '127.0.0.1',
-    "userLocal": 'XXXXXX',
+    "userLocal": 'root',
     "passwordLocal": 'XXXXXX',
     "databaseLocal": 'XXXXXX',
     
