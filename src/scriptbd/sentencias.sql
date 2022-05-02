@@ -1,3 +1,5 @@
+DROP DATABASE `lahormiguitadb`;
+
 CREATE DATABASE IF NOT EXISTS `lahormiguitadb`;
 
 USE `lahormiguitadb`;
@@ -148,6 +150,7 @@ CREATE TABLE IF NOT EXISTS Categorias (
     cat_id int AUTO_INCREMENT,
     cat_nombre varchar(45) NOT NULL,
     cat_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cat_estado int DEFAULT 1,
     PRIMARY KEY (cat_id)
 );
 

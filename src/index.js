@@ -19,7 +19,7 @@ app.use(cors());
 
 //routers
 app.use('/api/', require('./routers/index'));
-app.use('/api/proveedor',require('./routers/proveedor'));
+app.use('/api/proveedor', require('./routers/proveedor'));
 // app.use('/api/usuario', require('./routers/usuario'));
 // app.use('/api/order', require('./routers/order'));
 // app.use('/api/calificacion', require('./routers/calificacion'));
