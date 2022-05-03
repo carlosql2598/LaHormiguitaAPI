@@ -230,9 +230,9 @@ router.get('/categorias_no_asociadas/:PROV_ID',
 });
 
 
-router.delete('/eliminar_categoria/:PROV_ID', 
+router.delete('/eliminar_categoria/:PROV_CAT_ID', 
     [
-        check('PROV_ID', 'La variable PROV_ID debe ser un entero positivo.').isInt()
+        check('PROV_CAT_ID', 'La variable PROV_CAT_ID debe ser un entero positivo.').isInt()
     ],
     (req, res) => {
     
@@ -242,17 +242,17 @@ router.delete('/eliminar_categoria/:PROV_ID',
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const queryDelete = 'UPDATE categorias SET cat_estado = 0 WHERE cat_id = ?;'
-    const queryGetId = 'SELECT prov_id FROM proveedores WHERE prov_id = ?';
-    const { PROV_ID } = req.params;
+    const queryDelete = 'DELETE FROM proveedores_categorias WHERE prov_cat_id = ?;'
+    const queryGetId = 'SELECT prov_cat_id FROM proveedores_categorias WHERE prov_cat_id = ?';
+    const { PROV_CAT_ID } = req.params;
     
-    mysql.query(queryGetId, [PROV_ID], (err, rows) => {
+    mysql.query(queryGetId, [PROV_CAT_ID], (err, rows) => {
         if(!err) {
             if (rows.length === 0) {
-                res.status(404).json({"status": 404, "message": "El proveedor no se encuentra registrado en la base de datos.", "error": err});
+                res.status(404).json({"status": 404, "message": "No se encontró el registro en la base de datos.", "error": err});
             }
             else {
-                mysql.query(queryDelete, [PROV_ID], (err, rows) => {
+                mysql.query(queryDelete, [PROV_CAT_ID], (err, rows) => {
                     if(!err) {
                         res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": err});
                     }
@@ -292,9 +292,69 @@ router.post('/agregar_categoria',
             res.status(201).json({"status": 201, "message": "Solicitud ejecutada exitosamente.", "error": err});
         } 
         else {
-            res.status(500).json({"status": 500, "message": "Hubo un error en la consulta en la base de datos.", "error": err});
+            if (err["code"] == "ER_NO_REFERENCED_ROW_2") {
+                res.status(404).json({"status": 404, "message": "El proveedor o la categoria no se encuentran registrados en la base de datos.", "error": null});
+            }
+            else {
+                res.status(500).json({"status": 500, "message": "Hubo un error en la consulta en la base de datos.", "error": err});
+            }
         }
     } );
 });
+
+
+router.get('/elegibles_para_producto/:PROD_ID', 
+    [
+        check('PROD_ID', 'La variable PROD_ID debe ser un entero positivo.').isInt()
+    ],
+    (req, res) => {
+    
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const queryBuscar = 'SELECT pr.prov_id, pr.prov_nombre, pr.prov_celular \
+    FROM proveedores pr \
+    INNER JOIN proveedores_categorias prca \
+    ON pr.prov_id = prca.prov_id \
+    INNER JOIN categorias ca \
+    ON ca.cat_id = prca.cat_id \
+    WHERE ca.cat_id IN (SELECT c.cat_id \
+    FROM productos p \
+    INNER JOIN productos_categorias pc \
+    ON p.prod_id = pc.prod_id \
+    INNER JOIN categorias c \
+    ON c.cat_id = pc.cat_id \
+    WHERE p.prod_id = ?) \
+    GROUP BY pr.prov_id \
+    ORDER BY pr.prov_id;'
+
+    const queryGetId = 'SELECT prod_id FROM productos WHERE prod_id = ?';
+    const { PROD_ID } = req.params;
+    
+    mysql.query(queryGetId, [PROD_ID], (err, rows) => {
+        if(!err) {
+            if (rows.length === 0) {
+                res.status(404).json({"status": 404, "message": "El producto no se encuentra registrado en la base de datos.", "error": err});
+            }
+            else {
+                mysql.query(queryBuscar, [PROD_ID], (err, rows) => {
+                    if(!err) {
+                        res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": err, result: rows});
+                    }
+                    else {
+                        res.status(500).json({"status": 500, "message": "Hubo un error en la consulta en la base de datos.", "error": err});
+                    }
+                });
+            }
+        }
+        else {
+            res.status(500).json({"status": 500, "message": "Hubo un error en la consulta en la base de datos.", "error": err});
+        }
+    });
+});
+
 
 module.exports = router;
