@@ -19,11 +19,12 @@
   "homepage": "https://github.com/carlosql2598/LaHormiguitaAPI#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.2",
+    "express": "^4.18.1",
     "express-validator": "^6.14.0",
+    "lorem": "^0.4.0",
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.16"
   }
 }

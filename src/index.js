@@ -24,3 +24,5 @@ app.use('/api/cotizacion', require('./routers/cotizacion'));
 // app.use('/api/order', require('./routers/order'));
 // app.use('/api/calificacion', require('./routers/calificacion'));
 // app.use('/api/categoria', require('./routers/categoria'));
+
+app.use('/api/productos', require('./routers/productos'));
