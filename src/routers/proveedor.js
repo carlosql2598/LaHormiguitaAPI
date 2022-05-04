@@ -114,14 +114,53 @@ router.delete('/eliminar/:PROV_ID',
 });
 
 
+router.get('/restablecer/:PROV_ID', 
+    [
+        check('PROV_ID', 'La variable PROV_ID debe ser un entero positivo.').isInt()
+    ],
+    (req, res) => {
+    
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const queryDelete = 'UPDATE proveedores SET prov_estado = 1 WHERE prov_id = ?;'
+    const queryGetId = 'SELECT prov_id FROM proveedores WHERE prov_id = ?';
+    const { PROV_ID } = req.params;
+    
+    mysql.query(queryGetId, [PROV_ID], (err, rows) => {
+        if(!err) {
+            if (rows.length === 0) {
+                res.status(404).json({"status": 404, "message": "El proveedor no se encuentra registrado en la base de datos.", "error": err});
+            }
+            else {
+                mysql.query(queryDelete, [PROV_ID], (err, rows) => {
+                    if(!err) {
+                        res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": err});
+                    }
+                    else {
+                        res.status(500).json({"status": 500, "message": "Hubo un error en la consulta en la BD.", "error": err});
+                    }
+                });
+            }
+        }
+        else {
+            res.status(500).json({"status": 500, "message": "Hubo un error en la consulta en la base de datos.", "error": err});
+        }
+    });
+});
+
+
 //LISTAR Y BUSCAR LOS PROVEEDORES.
 
 router.get('/buscar/:BUSQ_PARAM?',
     (req, res) => {
 
-    const query = 'SELECT prov_id, prov_nombre, prov_celular, prov_ruc \
+    const query = 'SELECT prov_id, prov_nombre, prov_celular, prov_ruc, prov_estado \
                     FROM proveedores \
-                    WHERE (prov_nombre like CONCAT("%", ?, "%") OR prov_celular like CONCAT("%", ?, "%") OR prov_ruc like CONCAT("%", ?, "%")) AND prov_estado = 1;';
+                    WHERE (prov_nombre like CONCAT("%", ?, "%") OR prov_celular like CONCAT("%", ?, "%") OR prov_ruc like CONCAT("%", ?, "%"));';
 
     const BUSQ_PARAM = req.params['BUSQ_PARAM'] != undefined ? req.params['BUSQ_PARAM'] : "";
 
