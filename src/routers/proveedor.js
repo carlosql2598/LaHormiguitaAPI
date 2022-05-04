@@ -229,7 +229,7 @@ router.get('/categorias_asociadas/:PROV_ID',
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const queryBuscar = 'SELECT c.cat_id, c.cat_nombre, pc.prov_cat_id \
+    const queryBuscar = 'SELECT c.cat_id, c.cat_nombre, pc.prov_cat_id, p.prov_id \
         FROM proveedores p \
         INNER JOIN proveedores_categorias pc \
         ON p.prov_id = pc.prov_id \
