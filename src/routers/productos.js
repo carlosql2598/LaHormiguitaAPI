@@ -119,28 +119,16 @@ router.delete('/eliminar/:PROD_ID',
 });
 
 
-router.get('/buscar/:PROD_ID?',
+router.get('/buscar/:BUSQ_PARAM??',
     (req, res) => {
-
-    /*const errors = validationResult(req);
-
-    if (!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()});
-    }*/
     
-    const queryHelp = req.params['PROD_ID'] != undefined ? ' WHERE prod_id = ?' : "";
+    const query = 'SELECT * \
+                    FROM productos \
+                    WHERE prod_nombre like CONCAT("%", ?, "%") OR prod_precio like CONCAT("%", ?, "%");';
 
-    const query = 'SELECT * FROM productos ' + queryHelp;
+    const BUSQ_PARAM = req.params['BUSQ_PARAM'] != undefined ? req.params['BUSQ_PARAM'] : "";
 
-    const { PROD_ID } = req.params;
-
-    mysql.query(query, [PROD_ID], (err, rows) => {
-
-        console.log(PROD_ID);
-        console.log(query);
-        console.log(rows);
-        console.log(req.params);
-
+    mysql.query(query, [BUSQ_PARAM, BUSQ_PARAM], (err, rows) => {
         if(!err) {
             res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": err, result: rows});
         }
