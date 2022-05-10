@@ -162,7 +162,8 @@ router.get('/buscar/:BUSQ_PARAM?',
 
     const query = 'SELECT prov_id, prov_nombre, prov_celular, prov_ruc, prov_estado \
                     FROM proveedores \
-                    WHERE (prov_nombre like CONCAT("%", ?, "%") OR prov_celular like CONCAT("%", ?, "%") OR prov_ruc like CONCAT("%", ?, "%"));';
+                    WHERE (prov_nombre like CONCAT("%", ?, "%") OR prov_celular like CONCAT("%", ?, "%") OR prov_ruc like CONCAT("%", ?, "%")) \
+                    ORDER BY prov_id DESC;';
 
     const BUSQ_PARAM = req.params['BUSQ_PARAM'] != undefined ? req.params['BUSQ_PARAM'] : "";
 
