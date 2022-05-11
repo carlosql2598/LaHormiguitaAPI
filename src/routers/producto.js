@@ -369,9 +369,11 @@ router.post('/agregar_categoria',
     } );
 });
 
-router.get('/por_reabastecer_irc/:ALM_ID/:BUSQ_PARAM?',
+router.get('/por_reabastecer_irc/:ALM_ID/:FECHA_INI/:FECHA_FIN/:BUSQ_PARAM?',
     [
-        check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt()
+        check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
+        check('FECHA_INI', 'La variable FECHA_INI no puede estar vacía.').isEmpty(),
+        check('FECHA_FIN', 'La variable FECHA_FIN no puede estar vacía.').isEmpty()
     ],
     (req, res) => {
     
@@ -385,20 +387,21 @@ router.get('/por_reabastecer_irc/:ALM_ID/:BUSQ_PARAM?',
     ON p.est_id = es.est_id \
     INNER JOIN almacenes_productos ap \
     ON p.prod_id = ap.prod_id \
-    INNER JOIN pedidos_productos pp \
+    LEFT JOIN pedidos_productos pp \
     ON pp.prod_id = p.prod_id \
-    INNER JOIN pedidos pe \
+    LEFT JOIN pedidos pe \
     ON pe.ped_id = pp.ped_id \
     WHERE (p.prod_nombre like CONCAT("%", ?, "%") OR p.prod_costo like CONCAT("%", ?, "%")) AND  \
-    ap.alm_id = ? \
+    ap.alm_id = ? AND \
+    pe.ped_fecha >= ? AND pe.ped_fecha <= ? \
     GROUP BY p.prod_id \
     ORDER BY IRS DESC;';
 
-    var { ALM_ID, BUSQ_PARAM } = req.params;
+    var { ALM_ID, BUSQ_PARAM, FECHA_INI, FECHA_FIN } = req.params;
 
     BUSQ_PARAM = BUSQ_PARAM != undefined ? BUSQ_PARAM : "";
 
-    mysql.query(query, [BUSQ_PARAM, BUSQ_PARAM, ALM_ID], (err, rows) => {
+    mysql.query(query, [BUSQ_PARAM, BUSQ_PARAM, ALM_ID, FECHA_INI, FECHA_FIN], (err, rows) => {
         if(!err) {
             res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": err, result: rows});
         }
@@ -409,10 +412,12 @@ router.get('/por_reabastecer_irc/:ALM_ID/:BUSQ_PARAM?',
 
 });
 
-router.get('/irc_por_producto/:ALM_ID/:PROD_ID',
+router.get('/irc_por_producto/:ALM_ID/:PROD_ID/:FECHA_INI/:FECHA_FIN',
     [
         check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
-        check('PROD_ID', 'La variable PROD_ID debe ser un entero positivo.').isInt()
+        check('PROD_ID', 'La variable PROD_ID debe ser un entero positivo.').isInt(),
+        check('FECHA_INI', 'La variable FECHA_INI no puede estar vacía.').isEmpty(),
+        check('FECHA_FIN', 'La variable FECHA_FIN no puede estar vacía.').isEmpty()
     ],
     (req, res) => {
     
@@ -427,13 +432,13 @@ router.get('/irc_por_producto/:ALM_ID/:PROD_ID',
     ON pp.prod_id = p.prod_id \
     INNER JOIN pedidos pe \
     ON pe.ped_id = pp.ped_id \
-    WHERE ap.alm_id = ? AND p.prod_id = ? \
+    WHERE ap.alm_id = ? AND p.prod_id = ? AND pe.ped_fecha >= ? AND pe.ped_fecha <= ? \
     GROUP BY pe.ped_id \
     ORDER BY IRS DESC;';
 
-    var { ALM_ID, PROD_ID } = req.params;
+    var { ALM_ID, PROD_ID, FECHA_INI, FECHA_FIN } = req.params;
 
-    mysql.query(query, [ALM_ID, PROD_ID], (err, rows) => {
+    mysql.query(query, [ ALM_ID, PROD_ID, FECHA_INI, FECHA_FIN ], (err, rows) => {
         if(!err) {
             res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": err, result: rows});
         }
