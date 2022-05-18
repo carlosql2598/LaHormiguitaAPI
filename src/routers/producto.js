@@ -522,7 +522,6 @@ router.post('/insertar_multiple',
             if (rows[0]['@P_EXIST_ERROR'] == 1) {
                 existErrorInsert = true;
                 errorMessage += `Error al insertar el producto número ${rows[0]['@P_PROD_NRO_OUT']}: ${rows[0]['@P_ERROR_MESSAGE']}\n`;
-                console.log(rows);
             }
         })
         .catch((error)=> {
