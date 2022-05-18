@@ -5,13 +5,12 @@ const {check, validationResult} = require('express-validator');
 
 router.post('/insertar', 
     [
-        check('PROD_NOMBRE', 'La variable PROD_NOMBRE debe contener entre 1 y 45 caracteres.').isLength({min : 1, max : 45}),
-        check('PROD_PRECIO', 'La variable PROD_PRECIO debe ser un entero positivo.').isFloat(),
+        check('PROD_NOMBRE', 'La variable PROD_NOMBRE debe contener entre 1 y 45 caracteres.').isLength({min: 1, max: 45}),
+        check('PROD_PRECIO', 'La variable PROD_PRECIO debe ser un real positivo.').isFloat(),
         check('PROD_COSTO', 'La variable PROD_COSTO debe ser un real positivo.').isFloat(),
-        check('PROD_STOCK', 'La variable PROD_STOCK debe ser un real positivo.').isInt(),
-        check('PROD_ETIQUETA', 'La variable PROD_ETIQUETA debe contener entre 1 y 45 caracteres.').isLength({ min : 8, max : 12}),
+        check('PROD_STOCK', 'La variable PROD_STOCK debe ser un entero positivo.').isInt(),
+        check('PROD_ETIQUETA', 'La variable PROD_ETIQUETA debe contener entre 8 y 12 caracteres.').isLength({min: 8, max: 12}),
         check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt()
-        
     ],
     (req, res) => {
     
@@ -21,7 +20,7 @@ router.post('/insertar',
         return res.status(400).json({errors : errors.array()});
     }
 
-    const queryInsert = 'CALL PRC_REGISTRAR_PRODUCTO(@P_ERROR_MESSAGE, @P_EXIST_ERROR, ?, ?, ?, ?, ?, ?);';
+    const queryInsert = 'CALL PRC_REGISTRAR_PRODUCTO(@P_ERROR_MESSAGE, @P_EXIST_ERROR, @P_PROD_NRO_OUT, ?, ?, ?, ?, ?, ?, 1);';
     const querySelect = 'SELECT @P_ERROR_MESSAGE, @P_EXIST_ERROR;';
 
     const { PROD_NOMBRE, PROD_PRECIO, PROD_COSTO, PROD_STOCK, PROD_ETIQUETA, ALM_ID } = req.body;
@@ -53,11 +52,11 @@ router.put('/actualizar',
     [
         check('ALM_PROD_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
         check('PROD_ID', 'La variable PROD_ID debe ser un entero positivo.').isInt(),
-        check('PROD_NOMBRE', 'La variable PROD_NOMBRE debe contener entre 1 y 45 caracteres.').isLength({ min : 1, max : 45}),
+        check('PROD_NOMBRE', 'La variable PROD_NOMBRE debe contener entre 1 y 45 caracteres.').isLength({min: 1, max: 45}),
         check('PROD_PRECIO', 'La variable PROD_PRECIO debe ser un real positivo.').isFloat(),
         check('PROD_COSTO', 'La variable PROD_COSTO debe ser un real positivo.').isFloat(),
         check('PROD_STOCK', 'La variable PROD_STOCK debe ser un entero positivo.').isInt(),
-        check('PROD_ETIQUETA', 'La variable PROD_ETIQUETA debe ser un entero positivo.').isLength({ min : 8, max : 12})
+        check('PROD_ETIQUETA', 'La variable PROD_ETIQUETA debe ser un entero positivo.').isLength({min : 8, max: 12})
     ],
     (req, res) => {
     
@@ -447,6 +446,106 @@ router.get('/irc_por_producto/:ALM_ID/:PROD_ID/:FECHA_INI/:FECHA_FIN',
         }
     });
 
+});
+
+function mysqlQuery(query, params=null) {
+    return new Promise(function (resolve, reject) {
+        mysql.query(query, params, (err, rows) => {
+            if (!err){
+                resolve(rows);
+            }
+            else {
+                return reject([500, {'status': 500, 'message': 'Hubo un error en la consulta en la base de datos', 'error': err}]);
+            }
+        })
+    });
+}
+
+router.post('/insertar_multiple', 
+    [
+        check('PRODUCTOS', 'Se debe enviar un array de productos.').isArray(),
+        check('PRODUCTOS.*.PROD_NRO', 'La variable PROD_NRO debe ser un entero positivo.').isInt(),
+        check('PRODUCTOS.*.PROD_NOMBRE', 'La variable PROD_NOMBRE debe contener entre 1 y 45 caracteres.').isLength({min: 1, max: 45}),
+        check('PRODUCTOS.*.PROD_PRECIO', 'La variable PROD_PRECIO debe ser un real positivo.').isFloat(),
+        check('PRODUCTOS.*.PROD_COSTO', 'La variable PROD_COSTO debe ser un real positivo.').isFloat(),
+        check('PRODUCTOS.*.PROD_STOCK', 'La variable PROD_STOCK debe ser un entero positivo.').isInt(),
+        check('PRODUCTOS.*.PROD_ETIQUETA', 'La variable PROD_ETIQUETA debe contener entre 8 y 12 caracteres.').isLength({min: 8, max: 12}),
+        check('PRODUCTOS.*.ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt()
+    ],
+    async (req, res) => {
+    
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors : errors.array()});
+    }
+
+    const querySelect = 'SELECT @P_ERROR_MESSAGE, @P_EXIST_ERROR, @P_PROD_NRO_OUT;';
+    const queryInsert = 'CALL PRC_REGISTRAR_PRODUCTO(@P_ERROR_MESSAGE, @P_EXIST_ERROR, @P_PROD_NRO_OUT, ?, ?, ?, ?, ?, ?, ?);';
+    
+    let existErrorBd = false;
+    let existErrorInsert = false;
+    let errorQuery = null;
+    let errorMessage = '';
+
+    const productos = req.body['PRODUCTOS'];
+
+    for (let i = 0; i < productos.length; i++) {
+        const params = [
+            productos[i]['PROD_NOMBRE'],
+            productos[i]['PROD_PRECIO'],
+            productos[i]['PROD_COSTO'],
+            productos[i]['PROD_STOCK'],
+            productos[i]['PROD_ETIQUETA'],
+            productos[i]['ALM_ID'],
+            productos[i]['PROD_NRO']
+        ];
+
+        // Llama al procedimiento para crear producto
+        await mysqlQuery(queryInsert, params)
+        .then(()=> {
+            existErrorBd = false;
+        })
+        .catch((error)=> {
+            existErrorBd = true;
+            errorQuery = error;
+        })
+
+        if (existErrorBd) {
+            break;
+        }
+
+        // if (!existErrorInsert) {
+        // Hace un SELECT de los parametros OUT del procedimiento de insertar productos
+        await mysqlQuery(querySelect)
+        .then((rows)=> {
+            if (rows[0]['@P_EXIST_ERROR'] == 1) {
+                existErrorInsert = true;
+                errorMessage += `Error al insertar el producto número ${rows[0]['@P_PROD_NRO_OUT']}: ${rows[0]['@P_ERROR_MESSAGE']}\n`;
+                console.log(rows);
+            }
+        })
+        .catch((error)=> {
+            existErrorInsert = true;
+            errorMessage = error;
+        })
+        // }
+
+        // if (existErrorInsert) {
+        //     break;
+        // }
+    }
+
+    if (existErrorBd) {
+        res.status(500).json({"status": 500, "message": errorMessage, "error": errorQuery});
+    }
+
+    if (existErrorInsert) {
+        res.status(404).json({"status": 404, "message": errorMessage, "error": null});
+    }
+    else {
+        res.status(200).json({'status': 200, 'message': 'Solicitud ejecutada exitosamente.'});
+    }
 });
 
 module.exports = router;
