@@ -371,8 +371,8 @@ router.post('/agregar_categoria',
 router.get('/por_reabastecer_irc/:ALM_ID/:FECHA_INI/:FECHA_FIN/:BUSQ_PARAM?',
     [
         check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
-        check('FECHA_INI', 'La variable FECHA_INI no puede estar vacía.').isEmpty(),
-        check('FECHA_FIN', 'La variable FECHA_FIN no puede estar vacía.').isEmpty()
+        check('FECHA_INI', 'La variable FECHA_INI no puede estar vacía.').isDate(),
+        check('FECHA_FIN', 'La variable FECHA_FIN no puede estar vacía.').isDate()
     ],
     (req, res) => {
     
