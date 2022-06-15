@@ -25,5 +25,6 @@ app.use('/api/producto', require('./routers/producto'));
 app.use('/api/pedido', require('./routers/pedido'));
 app.use('/api/metrica', require('./routers/metrica'));
 app.use('/api/reporte', require('./routers/reporte'));
+app.use('/api/usuario', require('./routers/usuario'));
 // app.use('/api/calificacion', require('./routers/calificacion'));
 // app.use('/api/categoria', require('./routers/categoria'));
