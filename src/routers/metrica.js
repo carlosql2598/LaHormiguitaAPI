@@ -18,7 +18,7 @@ function mysqlQuery(query, params=null) {
 
 router.get('/productos_mas_vendidos/:ALM_ID/:FECHA',
     [
-        check('ALM_ID', 'La variable ALM debe ser un entero positivo.').isInt(),
+        check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
         check('FECHA', 'La variable FECHA no cumple con el formato correcto (AAAA-MM-DD).').isDate()
     ],
     async (req, res) => {
@@ -75,7 +75,7 @@ router.get('/productos_mas_vendidos/:ALM_ID/:FECHA',
 
 router.get('/productos_mayor_ganancia/:ALM_ID/:FECHA',
     [
-        check('ALM_ID', 'La variable ALM debe ser un entero positivo.').isInt(),
+        check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
         check('FECHA', 'La variable FECHA no cumple con el formato correcto (AAAA-MM-DD).').isDate()
     ],
     async (req, res) => {
@@ -137,7 +137,7 @@ router.get('/productos_mayor_ganancia/:ALM_ID/:FECHA',
 
 router.get('/porcentaje_ventas/:ALM_ID/:FECHA',
     [
-        check('ALM_ID', 'La variable ALM debe ser un entero positivo.').isInt(),
+        check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
         check('FECHA', 'La variable FECHA no cumple con el formato correcto (AAAA-MM-DD).').isDate()
     ],
     async (req, res) => {
@@ -196,7 +196,7 @@ router.get('/porcentaje_ventas/:ALM_ID/:FECHA',
 
 router.get('/margen_de_inversion/:ALM_ID/:FECHA',
     [
-        check('ALM_ID', 'La variable ALM debe ser un entero positivo.').isInt(),
+        check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
         check('FECHA', 'La variable FECHA no cumple con el formato correcto (AAAA-MM-DD).').isDate()
     ],
     async (req, res) => {
@@ -260,7 +260,7 @@ router.get('/margen_de_inversion/:ALM_ID/:FECHA',
 
 // router.get('/productos_perdidas/:ALM_ID/:FECHA',
 //     [
-//         check('ALM_ID', 'La variable ALM debe ser un entero positivo.').isInt(),
+//         check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
 //         check('FECHA', 'La variable FECHA no cumple con el formato correcto (AAAA-MM-DD).').isDate()
 //     ],
 //     async (req, res) => {

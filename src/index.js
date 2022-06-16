@@ -26,5 +26,5 @@ app.use('/api/pedido', require('./routers/pedido'));
 app.use('/api/metrica', require('./routers/metrica'));
 app.use('/api/reporte', require('./routers/reporte'));
 app.use('/api/usuario', require('./routers/usuario'));
-// app.use('/api/calificacion', require('./routers/calificacion'));
-// app.use('/api/categoria', require('./routers/categoria'));
+app.use('/api/temperatura', require('./routers/temperatura'));
+app.use('/api/humedad', require('./routers/humedad'));
