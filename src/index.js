@@ -28,3 +28,4 @@ app.use('/api/reporte', require('./routers/reporte'));
 app.use('/api/usuario', require('./routers/usuario'));
 app.use('/api/temperatura', require('./routers/temperatura'));
 app.use('/api/humedad', require('./routers/humedad'));
+app.use('/api/configuracion', require('./routers/configuracion'));
