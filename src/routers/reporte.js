@@ -48,12 +48,10 @@ router.get('/listar/:FECHA_INI?/:FECHA_FIN?',
     });
 });
 
-router.get('/detalle/:ALM_ID/:REP_ID/:FECHA_INI/:FECHA_FIN', 
+router.get('/generar/:ALM_ID/:FECHA', 
     [
         check('ALM_ID', 'La variable ALM_ID debe ser un entero positivo.').isInt(),
-        check('REP_ID', 'La variable REP_ID debe ser un entero positivo.').isInt(),
-        check('FECHA_INI', 'La variable FECHA_INI no cumple con el formato correcto (AAAA-MM-DD).').isDate(),
-        check('FECHA_FIN', 'La variable FECHA_FIN no cumple con el formato correcto (AAAA-MM-DD).').isDate()
+        check('FECHA', 'La variable FECHA no cumple con el formato correcto (AAAA-MM-DD).').isDate()
     ],
     async (req, res) => {
     
@@ -63,26 +61,27 @@ router.get('/detalle/:ALM_ID/:REP_ID/:FECHA_INI/:FECHA_FIN',
         return res.status(400).json({ errors: errors.array() });
     }
     
-    const { ALM_ID, REP_ID, FECHA_INI, FECHA_FIN } = req.params;
+    const { ALM_ID, FECHA } = req.params;
     const queryAlm = 'SELECT COUNT(*) AS cantidad_almacenes FROM almacenes WHERE alm_id = ?;';
     const queryRep = 'SELECT COUNT(*) AS cantidad_reportes FROM reportes WHERE rep_id = ?;';
     const query = 'SELECT \
+    p.prod_id, \
     p.prod_nombre, \
-    r.rep_titulo, \
-    r.rep_descripcion, \
-    rp.rep_prod_cant_vendida, \
-    rp.rep_prod_total_ingreso, \
-    DATE_FORMAT(r.rep_fecha_ini, "%Y-%m-%d") AS fecha_ini, \
-    DATE_FORMAT(r.rep_fecha_fin, "%Y-%m-%d") AS fecha_fin \
-    FROM reportes r \
-    INNER JOIN reportes_productos rp \
-    ON r.rep_id = rp.rep_id \
+    TRUNCATE(SUM(pp.ped_prod_precio), 2) AS prod_precio_unitario, \
+    SUM(pp.ped_prod_cantidad) AS ped_cantidad, \
+    TRUNCATE(SUM(pp.ped_prod_cantidad) * TRUNCATE(SUM(pp.ped_prod_precio), 2), 2) AS prod_ingreso, \
+    TRUNCATE( (p.prod_costo * pp.ped_prod_cantidad ) , 2) AS prod_costo, \
+    DATE_FORMAT(pe.ped_fecha, "%Y-%m-%d") AS ped_fecha \
+    FROM pedidos pe \
+    INNER JOIN pedidos_productos pp \
+    ON pe.ped_id = pp.ped_id \
     INNER JOIN productos p \
-    ON p.prod_id = rp.prod_id \
+    ON p.prod_id = pp.prod_id \
     INNER JOIN almacenes_productos ap \
     ON ap.prod_id = p.prod_id \
-    WHERE ap.alm_id = ? AND r.rep_id = ? AND r.rep_fecha_ini >= ? AND r.rep_fecha_fin <= ? \
-    ORDER BY r.rep_fecha_reg DESC;';
+    WHERE ap.alm_id = ? AND ped_fecha > ? \
+    GROUP BY p.prod_id \
+    ORDER BY ped_fecha DESC;';
 
     await mysqlQuery(queryAlm, ALM_ID)
     .then((rows) => {
@@ -94,17 +93,7 @@ router.get('/detalle/:ALM_ID/:REP_ID/:FECHA_INI/:FECHA_FIN',
         res.status(error[0]).json(error[1]);
     });
 
-    await mysqlQuery(queryRep, REP_ID)
-    .then((rows) => {
-        if(rows[0]['cantidad_reportes'] <= 0) {
-            res.status(404).json({"status": 404, "message": "No se encontró el ID del reporte", "error": "El ID del reporte no está registrado en la base de datos", result: null});
-        }
-    })
-    .catch((error) => {
-        res.status(error[0]).json(error[1]);
-    });
-
-    await mysqlQuery(query, [ALM_ID, REP_ID, FECHA_INI, FECHA_FIN])
+    await mysqlQuery(query, [ALM_ID, FECHA])
     .then((rows) => {
         res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": null, result: rows});
     })
