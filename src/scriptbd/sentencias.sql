@@ -9,8 +9,8 @@ USE `lahormiguitadb`;
 CREATE TABLE IF NOT EXISTS usuarios (
     usu_id int AUTO_INCREMENT,
     usu_fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    usu_nombre varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    usu_apellidos varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    usu_nombre varchar(45) NOT NULL,
+    usu_apellidos varchar(45) NOT NULL,
     usu_dni char(8) UNIQUE NOT NULL,
     usu_username varchar(45) NOT NULL,
     usu_contrasena varchar(85) NOT NULL,
@@ -28,13 +28,13 @@ CREATE TABLE IF NOT EXISTS pedidos (
 
 CREATE TABLE IF NOT EXISTS estados (
     est_id int AUTO_INCREMENT,
-    est_nombre varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    est_nombre varchar(45) NOT NULL,
     PRIMARY KEY (est_id)
 );
 
 CREATE TABLE IF NOT EXISTS productos (
     prod_id int AUTO_INCREMENT,
-    prod_nombre varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    prod_nombre varchar(45) NOT NULL,
     prod_precio float NOT NULL,
     prod_costo float NOT NULL,
     prod_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS pedidos_productos (
 
 CREATE TABLE IF NOT EXISTS reportes (
     rep_id int AUTO_INCREMENT,
-    rep_titulo varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    rep_descripcion text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    rep_titulo varchar(45) NOT NULL,
+    rep_descripcion text NOT NULL,
     rep_fecha_ini TIMESTAMP NOT NULL,
     rep_fecha_fin TIMESTAMP NOT NULL,
     rep_fecha_reg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -101,8 +101,8 @@ CREATE TABLE IF NOT EXISTS cotizaciones_proveedores (
 
 CREATE TABLE IF NOT EXISTS almacenes (
     alm_id int AUTO_INCREMENT,
-    alm_nombre varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    alm_direccion varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    alm_nombre varchar(45) NOT NULL,
+    alm_direccion varchar(35) NOT NULL,
     PRIMARY KEY (alm_id)
 );
 
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS reportes_productos (
 
 CREATE TABLE IF NOT EXISTS categorias (
     cat_id int AUTO_INCREMENT,
-    cat_nombre varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    cat_nombre varchar(45) NOT NULL,
     cat_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     cat_estado int DEFAULT 1,
     PRIMARY KEY (cat_id)
