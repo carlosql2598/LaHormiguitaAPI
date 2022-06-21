@@ -37,7 +37,8 @@ router.get('/listar/:FECHA_INI?/:FECHA_FIN?',
     DATE_FORMAT(rep_fecha_ini, "%Y-%m-%d") AS rep_fecha_ini, \
     DATE_FORMAT(rep_fecha_fin, "%Y-%m-%d") AS rep_fecha_fin \
     FROM reportes \
-    WHERE rep_fecha_ini >= ? and rep_fecha_fin <= ?;';
+    WHERE rep_fecha_ini >= ? and rep_fecha_fin <= ? \
+    ORDER BY rep_fecha_reg DESC;';
 
     await mysqlQuery(query, [FECHA_INI, FECHA_FIN])
     .then((rows) => {
@@ -63,13 +64,12 @@ router.get('/generar/:ALM_ID/:FECHA',
     
     const { ALM_ID, FECHA } = req.params;
     const queryAlm = 'SELECT COUNT(*) AS cantidad_almacenes FROM almacenes WHERE alm_id = ?;';
-    const queryRep = 'SELECT COUNT(*) AS cantidad_reportes FROM reportes WHERE rep_id = ?;';
     const query = 'SELECT \
     p.prod_id, \
     p.prod_nombre, \
-    TRUNCATE(SUM(pp.ped_prod_precio), 2) AS prod_precio_unitario, \
-    SUM(pp.ped_prod_cantidad) AS ped_cantidad, \
-    TRUNCATE(SUM(pp.ped_prod_cantidad) * TRUNCATE(SUM(pp.ped_prod_precio), 2), 2) AS prod_ingreso, \
+    TRUNCATE(pp.ped_prod_precio, 2) AS precio_unitario, \
+    SUM(pp.ped_prod_cantidad) AS cantidad_vendida, \
+    TRUNCATE(SUM(pp.ped_prod_cantidad) * TRUNCATE(pp.ped_prod_precio, 2), 2) AS ingreso_total, \
     TRUNCATE( (p.prod_costo * pp.ped_prod_cantidad ) , 2) AS prod_costo, \
     DATE_FORMAT(pe.ped_fecha, "%Y-%m-%d") AS ped_fecha \
     FROM pedidos pe \
@@ -115,15 +115,17 @@ router.get('/detalle/:ALM_ID/:REP_ID',
         return res.status(400).json({ errors: errors.array() });
     }
     
-    const { ALM_ID, REP_ID, FECHA_INI, FECHA_FIN } = req.params;
+    const { ALM_ID, REP_ID } = req.params;
     const queryAlm = 'SELECT COUNT(*) AS cantidad_almacenes FROM almacenes WHERE alm_id = ?;';
     const queryRep = 'SELECT COUNT(*) AS cantidad_reportes FROM reportes WHERE rep_id = ?;';
     const query = 'SELECT \
     p.prod_nombre, \
     r.rep_titulo, \
     r.rep_descripcion, \
-    rp.rep_prod_cant_vendida, \
-    rp.rep_prod_total_ingreso, \
+    rp.rep_prod_cant_vendida AS cantidad_vendida, \
+    rp.rep_prod_total_ingreso AS ingreso_total, \
+    TRUNCATE(rp.rep_prod_total_ingreso / rp.rep_prod_cant_vendida, 2) AS precio_unitario, \
+    rp.rep_prod_costo AS prod_costo, \
     DATE_FORMAT(r.rep_fecha_ini, "%Y-%m-%d") AS fecha_ini, \
     DATE_FORMAT(r.rep_fecha_fin, "%Y-%m-%d") AS fecha_fin \
     FROM reportes r \
@@ -175,6 +177,7 @@ router.post('/insertar',
         check('REPORTES_PRODUCTOS', 'Se debe enviar un array de reportes de productos (REPORTES_PRODUCTOS).').isArray(),
         check('REPORTES_PRODUCTOS.*.REP_PROD_CANT_VENDIDA', 'La variable REP_PROD_CANT_VENDIDA debe ser un entero positivo.').isInt({min: 1}),
         check('REPORTES_PRODUCTOS.*.REP_PROD_TOTAL_INGRESO', 'La variable REP_PROD_TOTAL_INGRESO debe ser un entero positivo.').isFloat({min: 1}),
+        check('REPORTES_PRODUCTOS.*.REP_PROD_COSTO', 'La variable REP_PROD_COSTO debe ser un entero positivo.').isFloat({min: 1}),
         check('REPORTES_PRODUCTOS.*.PROD_ID', 'La variable PROD_ID debe ser un entero positivo.').isInt({min: 1})
     ],
     async (req, res) => {
@@ -189,7 +192,7 @@ router.post('/insertar',
     const queryUsu = 'SELECT COUNT(*) AS cantidad_usuarios FROM usuarios WHERE usu_id = ?;';
     const queryProd = 'SELECT COUNT(*) AS cantidad_productos FROM productos WHERE prod_id = ?;';
     const queryFunction = 'SELECT FUN_INSERTAR_REPORTE_Y_OBTENER_ID(?, ?, ?, ?, ?) AS ULTIMO_ID;';
-    let queryInserts = "INSERT INTO reportes_productos (rep_prod_cant_vendida, rep_prod_total_ingreso, prod_id, rep_id) VALUES";
+    let queryInserts = "INSERT INTO reportes_productos (rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo, prod_id, rep_id) VALUES";
     let repId = 0;
     let queryValues = [];
     let cantidadUsuarios = 0;
@@ -237,15 +240,16 @@ router.post('/insertar',
         for (let i = 0; i < REPORTES_PRODUCTOS.length; i++) {
 
             if (i == REPORTES_PRODUCTOS.length - 1) {
-                queryInserts = queryInserts + ' (?, ?, ?, ?);';
+                queryInserts = queryInserts + ' (?, ?, ?, ?, ?);';
             }
             else {
-                queryInserts = queryInserts + ' (?, ?, ?, ?),';
+                queryInserts = queryInserts + ' (?, ?, ?, ?, ?),';
             }
     
             queryValues.push(
                 REPORTES_PRODUCTOS[i]['REP_PROD_CANT_VENDIDA'], 
                 REPORTES_PRODUCTOS[i]['REP_PROD_TOTAL_INGRESO'],
+                REPORTES_PRODUCTOS[i]['REP_PROD_COSTO'],
                 REPORTES_PRODUCTOS[i]['PROD_ID'],
                 repId
             );

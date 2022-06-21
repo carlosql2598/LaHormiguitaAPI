@@ -138,6 +138,7 @@ CREATE TABLE IF NOT EXISTS reportes_productos (
     rep_prod_id int AUTO_INCREMENT,
     rep_prod_cant_vendida int NOT NULL,
     rep_prod_total_ingreso float NOT NULL,
+    rep_prod_costo float NOT NULL,
     rep_id int NOT NULL,
     prod_id int NOT NULL,
     PRIMARY KEY (rep_prod_id),
@@ -882,54 +883,54 @@ INSERT INTO reportes (rep_titulo, rep_descripcion, rep_fecha_ini, rep_fecha_fin,
 
 -- ############################################ Reportes_Productos ############################################
 
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (24, 12, 22, 124.89);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (3, 2, 6, 30.39);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (38, 19, 16, 179.31);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (6, 14, 22, 92.96);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (40, 24, 7, 44.42);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (25, 2, 10, 136.06);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (9, 18, 15, 58.92);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (32, 21, 19, 176.93);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (19, 17, 14, 146.88);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (47, 9, 11, 126.70);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (6, 7, 12, 123.88);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (34, 21, 17, 38.58);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (19, 9, 24, 54.79);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (18, 5, 23, 110.85);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (42, 3, 6, 101.82);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (38, 25, 5, 128.55);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (19, 1, 19, 110.22);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (29, 15, 7, 113.76);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (48, 16, 8, 86.40);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (13, 16, 23, 53.37);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (1, 8, 18, 53.34);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (30, 4, 24, 143.97);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (41, 14, 11, 160.76);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (43, 16, 7, 31.48);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (6, 14, 13, 105.24);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (24, 4, 15, 149.10);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (31, 23, 18, 170.86);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (30, 21, 19, 181.31);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (11, 12, 20, 93.64);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (23, 15, 20, 31.45);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (34, 7, 22, 46.89);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (4, 25, 9, 71.01);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (4, 7, 24, 122.12);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (38, 19, 22, 52.84);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (13, 7, 18, 91.11);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (2, 1, 21, 63.30);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (49, 18, 11, 67.30);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (31, 2, 6, 47.09);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (14, 5, 20, 94.43);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (24, 11, 11, 178.95);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (25, 18, 8, 160.54);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (35, 2, 5, 139.62);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (1, 10, 10, 45.42);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (24, 6, 20, 72.78);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (8, 5, 21, 57.23);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (18, 14, 13, 50.93);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (30, 14, 24, 62.84);
-INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso) VALUES (39, 4, 7, 87.95);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (50, 16, 16, 177.96, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (43, 16, 21, 174.34, 10);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (6, 15, 24, 76.22, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (31, 17, 16, 128.02, 9);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (11, 11, 13, 90.83, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (36, 24, 22, 117.41, 9);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (47, 20, 13, 165.71, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (32, 25, 15, 126.94, 9);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (3, 25, 23, 130.64, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (30, 4, 5, 118.03, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (15, 21, 15, 141.13, 9);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (32, 21, 10, 147.70, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (50, 12, 23, 141.19, 6);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (45, 19, 8, 169.60, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (2, 13, 17, 123.75, 10);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (37, 19, 16, 60.01, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (46, 3, 15, 98.68, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (18, 9, 18, 38.04, 5);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (7, 24, 21, 154.84, 8);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (9, 22, 25, 28.48, 10);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (18, 12, 9, 96.61, 8);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (34, 23, 23, 84.94, 9);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (49, 11, 17, 93.27, 9);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (7, 3, 11, 173.71, 7);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (48, 1, 20, 145.70, 6);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (13, 2, 24, 145.99, 8);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (10, 17, 24, 105.81, 8);      
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (9, 4, 20, 126.34, 9);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (26, 12, 8, 68.16, 9);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (42, 5, 5, 55.20, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (22, 13, 19, 94.04, 9);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (19, 14, 22, 141.56, 10);     
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (15, 21, 23, 79.65, 10);      
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (18, 9, 5, 87.90, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (16, 14, 16, 85.65, 8);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (43, 25, 15, 153.72, 10);     
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (22, 23, 12, 74.36, 8);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (44, 6, 18, 93.36, 9);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (11, 20, 15, 40.34, 8);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (9, 19, 12, 157.31, 8);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (37, 21, 8, 100.18, 7);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (49, 6, 6, 69.22, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (46, 10, 16, 35.00, 7);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (26, 11, 6, 97.38, 7);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (20, 7, 6, 183.41, 5);        
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (3, 9, 25, 59.00, 7);
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (35, 7, 20, 143.53, 7);       
+INSERT INTO reportes_productos (prod_id, rep_id, rep_prod_cant_vendida, rep_prod_total_ingreso, rep_prod_costo) VALUES (41, 10, 9, 71.53, 9); 
 
 
 -- ############################################ Configuraciones ############################################

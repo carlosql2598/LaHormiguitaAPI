@@ -31,23 +31,25 @@ router.post('/login',
     }
     
     const { USER, PASSWORD } = req.body;
-    const query = "SELECT COUNT(*) AS cantidad_usuarios FROM usuarios WHERE usu_username = ? AND usu_contrasena = ?;";
+    const query = "SELECT usu_id, usu_nombre, usu_apellidos FROM usuarios WHERE usu_username = ? AND usu_contrasena = ?;";
     const hashedPassword = createHash('sha256').update(PASSWORD).digest('hex');
-    let cantidad_usuarios = 0;
+    let usuario = null;
 
     await mysqlQuery(query, [USER, hashedPassword])
     .then((rows) => {
-        cantidad_usuarios = rows[0]['cantidad_usuarios'];
+        if (rows.length > 0) {
+            usuario = rows[0];
+        }
     })
     .catch((error) => {
         res.status(error[0]).json(error[1]);
     });
-
-    if (cantidad_usuarios > 0) {
-        res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": null});
+    
+    if (usuario) {
+        res.status(200).json({"status": 200, "message": "Solicitud ejecutada exitosamente.", "error": null, result: usuario});
     }
     else {
-        res.status(404).json({'status': 404, 'message': 'El usuario o contraseña son incorrectos', 'error': null});
+        res.status(404).json({'status': 404, 'message': 'El usuario o contraseña son incorrectos', 'error': 'No se econtró el usuario o la contraseña en la base de datos.', result: null});
     }
 });
 
