@@ -20,7 +20,7 @@ function mysqlQuery(query, params=null) {
 router.post('/login', 
     [
         check('USER', 'La variable USER debe contener entre 1 y 45 caracteres.').isLength({min: 1, max: 45}),
-        check('PASSWORD', 'La variable USER debe contener entre 1 y 85 caracteres.').isLength({min: 1, max: 85})
+        check('PASSWORD', 'La variable PASSWORD debe contener entre 1 y 85 caracteres.').isLength({min: 1, max: 85})
     ],
     async (req, res) => {
     
